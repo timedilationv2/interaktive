@@ -1,409 +1,1191 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en" class="scroll-smooth" data-theme="dark">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Arsalan Khan | Gen AI & Systems Architect</title>
+  <title>Arsalan Arif Khan – Interactive Resume</title>
 
-  <!-- Tailwind & Chart.js CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- SEO & Social Meta Tags (Section 6) -->
+  <meta name="description" content="Docs-as-Code architect & senior tech writer building scalable knowledge pipelines.">
+  <meta property="og:title" content="Arsalan Arif Khan – Docs Systems Architect">
+  <meta property="og:image" content="https://timedilationv2.github.io/assets/og-card.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="canonical" href="https://timedilationv2.github.io/interactive/">
 
-  <!-- Fonts -->
+  <!-- Fonts: Request only needed weights (Section 1 - Font diet) -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Lora:wght@400;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=IBM+Plex+Mono:wght@300;400;500&display=swap" rel="stylesheet" />
+
+  <!-- Externalise CSS (Section 1 - Action) -->
+  <link rel="preload" href="css/site.css" as="style" onload="this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="css/site.css"></noscript>
 
   <style>
+    /* CSS Variables for easy theming */
     :root {
-      --accent: #4a6e8a;
-      --accent-20: rgba(74,110,138,.2);
-      --bg: #f8f7f4;
-      --fg: #333d42;
-      --muted: #6b7280;
-      --border: #d1d5db;
+      --font-sans: "Inter", system-ui, sans-serif;
+      --font-mono: "IBM Plex Mono", monospace;
+      --hue: 215; /* Base hue for blues/grays */
+
+      /* Dark Theme Defaults */
+      --bg-color: hsl(var(--hue), 20%, 9%); /* Dark background */
+      --card-bg: hsl(var(--hue), 25%, 12%); /* Slightly lighter card background */
+      --card-border: hsl(var(--hue), 25%, 18%); /* Subtle border */
+      --text-primary: hsl(var(--hue), 15%, 88%); /* Light text */
+      --text-secondary: hsl(var(--hue), 10%, 65%); /* Muted text */
+      --text-headings: hsl(0, 0%, 100%); /* White headings */
+      --accent-main: hsl(var(--hue), 100%, 55%); /* Primary accent blue */
+      --accent-sub: hsl(45, 100%, 55%); /* Secondary accent yellow for highlights */
+      --shadow-md: 0 4px 10px hsla(var(--hue), 50%, 2%, 0.4);
+      --shadow-lg: 0 10px 30px -10px hsla(var(--hue), 50%, 2%, 0.5);
+
+      /* Accessibility: Add color-scheme (Section 5) */
+      color-scheme: light dark;
     }
-    .dark {
-      --bg: #0f172a;
-      --fg: #e2e8f0;
-      --muted: #94a3b8;
-      --border: #334155;
-      --accent: #60a5fa;
-      --accent-20: rgba(96,165,250,.2);
+
+    /* Light Theme Overrides */
+    html[data-theme='light'] {
+      --bg-color: hsl(var(--hue), 25%, 94%);
+      --card-bg: hsl(0, 0%, 100%);
+      --card-border: hsl(var(--hue), 25%, 88%);
+      --text-primary: hsl(var(--hue), 20%, 25%);
+      --text-secondary: hsl(var(--hue), 15%, 45%);
+      --text-headings: hsl(var(--hue), 30%, 10%);
+      --accent-main: hsl(var(--hue), 70%, 50%); /* Slightly darker blue for light theme */
+      --accent-sub: hsl(45, 80%, 45%); /* Slightly darker yellow for light theme */
+      --shadow-md: 0 4px 10px hsla(var(--hue), 20%, 50%, 0.15);
+      --shadow-lg: 0 10px 25px -5px hsla(var(--hue), 20%, 50%, 0.2);
     }
-    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--fg); }
-    h1,h2,h3 { font-family: 'Lora', serif; }
-    .section-title { border-bottom: 1px solid var(--border); }
-    .fade-in { opacity:0; transform: translateY(16px); transition: opacity .5s ease, transform .5s ease; }
-    .fade-in.visible { opacity:1; transform: none; }
-    .accordion-panel { max-height:0; overflow:hidden; transition:max-height .4s ease; }
-    .accordion.open .accordion-panel { max-height:1000px; }
-    .badge { display:inline-flex; align-items:center; padding:.25rem .65rem; border-radius:9999px; font-size:.7rem; font-weight:600; border:1px solid var(--border); background:var(--accent-20); color:var(--accent);}
-    .chart-wrap { position:relative; width:100%; max-width:640px; margin:auto; height:320px; }
-    @media (min-width:768px){ .chart-wrap{height:360px;} }
+
+    /* Base Styles */
+    * {
+      box-sizing: border-box;
+    }
+    html {
+      scroll-padding-top: 5rem; /* Space for sticky nav (Section 0 - Scroll-anchor fix) */
+    }
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: var(--bg-color);
+      color: var(--text-primary);
+      font-family: var(--font-sans);
+      line-height: 1.6; /* Improved readability */
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale; /* For better font rendering on Firefox */
+    }
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+    a {
+      color: var(--accent-main);
+      text-decoration: none;
+      transition: color .2s ease-in-out;
+    }
+    a:hover {
+      color: var(--accent-sub);
+    }
+    h1, h2, h3 {
+      color: var(--text-headings);
+      margin: 0 0 .5rem;
+      font-weight: 600;
+      line-height: 1.2; /* Tighter line height for headings */
+    }
+    h1 {
+      font-size: 2.8rem;
+    }
+    h2 {
+      font-size: 1.8rem;
+      margin-bottom: 1.5rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid var(--card-border);
+      display: flex;
+      align-items: center;
+    }
+    h3 {
+      font-size: 1.25rem;
+    }
+    p {
+      margin: 1rem 0 0; /* Consistent top margin for paragraphs */
+      line-height: 1.6;
+    }
+    strong {
+      font-weight: 700;
+      color: var(--text-headings);
+    }
+    .icon {
+      display: inline-block;
+      width: 1.1em;
+      height: 1.1em;
+      stroke-width: 2;
+      vertical-align: middle;
+      margin-right: 0.5em;
+      color: var(--accent-main); /* Icons accent color */
+    }
+    
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: var(--bg-color); }
+    ::-webkit-scrollbar-thumb { background: var(--card-border); border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--text-secondary); }
+
+    /* --- Hero Section (Twitter-style header) --- */
+    .hero {
+      background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://placehold.co/1600x200/1F2937/6B7280?text=Developer+Documentation+Architect') no-repeat center center; /* Smaller banner image */
+      background-size: cover;
+      padding-bottom: 0; /* No padding at bottom of banner */
+      border-bottom: 1px solid var(--card-border);
+      position: relative;
+      padding-top: 4.5rem; /* room for nav (Section 2 - Hero + Navigation Compact Layout) */
+      min-height: 200px; /* Minimum height for the banner */
+    }
+    .hero-content {
+      padding-top: 0; /* No padding at top of content, avatar positioned separately */
+      position: relative;
+      display: block; /* Removed flex for Twitter-style layout */
+      align-items: flex-start; /* Reset alignment */
+      gap: 0; /* Reset gap */
+      min-height: auto; /* Reset min-height */
+    }
+    .profile-picture {
+      position: absolute; /* Position relative to hero */
+      top: 120px; /* Position below the banner */
+      left: 1.5rem; /* Aligned with container padding */
+      width: 128px; /* Shrink hero image on phones (Section 0) */
+      height: 128px; /* Shrink hero image on phones (Section 0) */
+      border-radius: 50%;
+      background-color: var(--card-bg);
+      border: 5px solid var(--card-bg);
+      box-shadow: var(--shadow-lg);
+      overflow: hidden;
+      z-index: 10;
+    }
+    /* Hide text fallback when avatar host changes (Section 0) */
+    .profile-picture img:not([src*="avatars.githubusercontent"]) { visibility: hidden; }
+
+    .profile-info {
+      padding: 1rem 0 0;
+      margin-left: 0; /* Reset margin */
+      color: var(--text-primary); /* Use primary text color for info */
+      margin-top: 80px; /* Space for avatar below banner */
+      padding-left: 1.5rem; /* Align with container padding */
+    }
+    .profile-info h1 {
+      font-family: var(--font-sans);
+      font-size: clamp(1.8rem, 4.5vw, 2.8rem); /* Section 2 - Hero + Navigation Compact Layout */
+      margin: 0;
+      color: var(--text-headings); /* Use heading color */
+    }
+    .profile-info p {
+      font-size: 1.2rem;
+      color: var(--text-secondary); /* Use secondary text color */
+      margin: 0.25rem 0 1rem;
+      font-weight: 300;
+    }
+    .contact-info {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      font-size: 0.9rem;
+      font-family: var(--font-mono);
+      color: var(--text-secondary);
+      margin-top: 1rem;
+    }
+    .contact-info a {
+      color: var(--text-secondary);
+      transition: color .2s;
+      display: flex;
+      align-items: center;
+    }
+    .contact-info a:hover {
+      color: var(--accent-sub);
+    }
+    .contact-info .icon {
+      color: var(--text-secondary); /* Contact icons slightly muted */
+    }
+    .contact-info a:hover .icon {
+      color: var(--accent-sub); /* Contact icons change color on hover */
+    }
+
+
+    /* --- Sticky Navigation (Section 2 - Hero + Navigation Compact Layout) --- */
+    .main-nav {
+      position: absolute; /* merge nav into hero band */
+      top: 0;
+      left: 0;
+      right: 0;
+      background: transparent; /* merge nav into hero band */
+      border: none; /* merge nav into hero band */
+      box-shadow: none; /* merge nav into hero band */
+      z-index: 100;
+    }
+    html[data-theme='light'] .main-nav {
+      background: transparent; /* merge nav into hero band */
+    }
+    .main-nav .nav-links {
+      display: flex;
+      justify-content: flex-end; /* Align links to the right */
+      gap: 1.5rem;
+      padding: 0.75rem 1.5rem; /* Add horizontal padding to nav links */
+    }
+    .main-nav a {
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      color: #fff; /* merge nav into hero band */
+      font-weight: 700;
+      text-decoration: none;
+      transition: all .2s;
+      position: relative;
+    }
+    .main-nav a:hover {
+      color: var(--text-primary);
+      background-color: hsla(var(--hue), 20%, 50%, 0.1);
+    }
+    .main-nav a.active {
+      color: var(--accent-sub); /* Active link color */
+    }
+    .main-nav a.active::after {
+      content: '';
+      position: absolute;
+      bottom: -13px; /* Adjust based on padding */
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background-color: var(--accent-sub);
+    }
+
+    /* --- Main Content Cards (Section 3 - Cards & Content Density) --- */
+    main { padding: 2.5rem 0; }
+    .card {
+      background: var(--card-bg);
+      padding: 2rem;
+      border-radius: 12px;
+      border: 1px solid var(--card-border);
+      box-shadow: var(--shadow-md);
+      margin-bottom: 2rem; /* Section 3 - Cards & Content Density */
+    }
+    .card h2 .icon {
+      color: var(--accent-main);
+      margin-right: 0.75rem;
+    }
+
+    /* --- How I Work Section --- */
+    .how-i-work {
+      margin-top: 2rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--card-border);
+    }
+    .how-i-work h3 {
+      font-size: 1.35rem;
+      color: var(--text-headings);
+      margin-bottom: 1rem;
+    }
+    .how-i-work ul {
+      margin: 0;
+      padding-left: 1.5rem;
+      list-style: disc;
+    }
+    .how-i-work li {
+      margin-bottom: 0.5rem;
+      line-height: 1.5;
+      color: var(--text-primary);
+    }
+
+
+    /* --- Skills Tabs --- */
+    .skill-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .75rem;
+      margin-bottom: 1.5rem;
+    }
+    .skill-tabs button {
+      background: transparent;
+      border: 1.5px solid var(--card-border); /* Increased border thickness */
+      border-radius: 6px;
+      padding: .5rem 1rem;
+      font-size: .9rem;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all .2s;
+      font-family: var(--font-mono); /* Use mono font for skill tabs */
+    }
+    .skill-tabs button:hover {
+      border-color: var(--accent-main);
+      color: var(--accent-main);
+    }
+    .skill-tabs button[aria-selected="true"] {
+      background: var(--accent-main);
+      color: white;
+      border-color: var(--accent-main);
+    }
+    .skills-content {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      min-height: 100px; /* Ensure space even if content is small */
+      transition: opacity .2s;
+    }
+    .skill-pill {
+      background: hsl(var(--hue), 20%, 18%);
+      color: var(--text-primary);
+      font-size: .9rem;
+      padding: .5rem 1rem;
+      border-radius: 6px;
+      font-family: var(--font-mono);
+    }
+    html[data-theme='light'] .skill-pill {
+      background: hsl(var(--hue), 20%, 90%);
+      color: var(--text-primary);
+    }
+
+    /* --- Experience Timeline (inspired by 2.html) --- */
+    .exp-list {
+        position: relative;
+        padding-left: 2rem; /* Space for timeline bar and circles */
+    }
+    .exp-list::before {
+        content: '';
+        position: absolute;
+        left: 8px; /* Position for the vertical line */
+        top: 10px;
+        bottom: 10px;
+        width: 2px;
+        background-color: var(--card-border);
+    }
+    .exp-list details {
+        position: relative;
+        padding: 1rem 0 1rem 0;
+        border-bottom: 1px solid var(--card-border);
+    }
+    .exp-list details:last-child { border-bottom: none; }
+    .exp-list details::before {
+        content: '';
+        position: absolute;
+        left: -8px; /* Position for the circle on the line */
+        top: 28px; /* Adjust to align with summary */
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        background-color: var(--card-bg);
+        border: 2px solid var(--accent-main);
+        transition: all .2s;
+        box-shadow: 0 0 0 4px var(--bg-color); /* To make it float above the line */
+    }
+    .exp-list details[open]::before {
+        background-color: var(--accent-sub);
+        border-color: var(--accent-sub);
+    }
+    .exp-list summary {
+      list-style: none;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--text-headings);
+    }
+    .exp-list summary::-webkit-details-marker { display: none; }
+    .exp-meta {
+      color: var(--text-secondary);
+      font-size: .9rem;
+      font-weight: 400;
+      margin-top: .25rem;
+    }
+    .exp-company {
+      color: var(--accent-main);
+      font-weight: 500;
+    }
+    .exp-details {
+      padding: 1rem 0 0 0;
+      margin-top: 1rem;
+    }
+    .exp-details ul {
+      margin: 0;
+      padding-left: 1.25rem;
+      list-style: disc;
+    }
+    .exp-details li {
+      margin-bottom: 0.5rem;
+      line-height: 1.5;
+    }
+    .summary-chevron {
+      transition: transform 0.2s ease-in-out;
+      color: var(--text-secondary);
+    }
+    details[open] > summary .summary-chevron {
+      transform: rotate(90deg);
+      color: var(--accent-main);
+    }
+
+    /* --- Education Section --- */
+    .edu-card {
+      background: var(--card-bg);
+      padding: 1.5rem;
+      border-radius: 8px;
+      border: 1px solid var(--card-border);
+      box-shadow: var(--shadow-sm);
+      margin-bottom: 1.5rem;
+    }
+    .edu-card h3 {
+      font-size: 1.15rem;
+      margin-bottom: 0.25rem;
+      color: var(--text-headings);
+    }
+    .edu-card .emph {
+      color: var(--accent-main);
+      font-size: 0.95rem;
+      margin-top: 0.2rem;
+      font-weight: 500;
+    }
+    .edu-card .meta {
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      margin-top: 0.2rem;
+    }
+    .cert-list {
+      margin-top: 0.75rem;
+      padding-left: 1.25rem;
+      list-style: disc;
+      font-size: 0.9rem;
+      color: var(--text-primary);
+    }
+    .cert-list li {
+      margin-bottom: 0.4rem;
+    }
+
+    /* --- Footer & Theme Toggle --- */
+    footer {
+      text-align: center;
+      padding: 2rem;
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      margin-top: 2rem;
+      border-top: 1px solid var(--card-border);
+    }
+    .theme-switcher {
+      position: fixed;
+      bottom: 1.5rem;
+      right: 1.5rem;
+      z-index: 101;
+    }
+    .theme-switcher button {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      box-shadow: var(--shadow-lg);
+      cursor: pointer;
+      color: var(--text-secondary);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: all .2s;
+    }
+    .theme-switcher button:hover {
+      color: var(--accent-main);
+      border-color: var(--accent-main);
+      box-shadow: 0 0 15px var(--accent-main);
+    }
+    .theme-switcher svg {
+      width: 24px;
+      height: 24px;
+    }
+    #theme-light-btn { display: none; }
+    html[data-theme='light'] #theme-light-btn { display: flex; }
+    html[data-theme='light'] #theme-dark-btn { display: none; }
+
+
+    /* --- Responsive Adjustments --- */
+    @media (max-width: 768px) {
+      .hero-content {
+        flex-direction: column; /* Section 2 - Hero + Navigation Compact Layout */
+        gap: 1.25rem; /* Section 2 - Hero + Navigation Compact Layout */
+        padding-top: 2rem; /* Section 2 - Hero + Navigation Compact Layout */
+      }
+      .profile-picture {
+        width: 96px; /* Shrink hero image on phones (Section 0) */
+        height: 96px; /* Shrink hero image on phones (Section 0) */
+        top: 80px; /* Adjust position for smaller screens */
+      }
+      .profile-info {
+        text-align: center;
+        margin-top: 60px; /* Adjust space for avatar */
+      }
+      .profile-info h1 { font-size: 2.2rem; }
+      .profile-info p { font-size: 1rem; }
+      .contact-info { justify-content: center; flex-wrap: wrap; }
+      .main-nav .nav-links {
+        justify-content: center;
+        gap: 0.8rem;
+      }
+      .main-nav a { padding: 0.4rem 0.8rem; }
+      h2 { font-size: 1.5rem; }
+      .card { padding: 1.5rem; }
+      .exp-list { padding-left: 1.5rem; }
+      .exp-list details::before { left: -10px; top: 25px; } /* Adjust timeline circles */
+    }
+
+    /* New styles for Ask Arsalan section */
+    .btn{
+      padding:.45rem .9rem;border:1px solid var(--card-border);
+      border-radius:6px;background:var(--card-bg);color:var(--text-primary);
+      cursor:pointer;font-size:.9rem;font-weight:600;
+      transition: all .2s; /* Added transition */
+    }
+    .btn:hover{border-color:var(--accent-main);color:var(--accent-main); background: color-mix(in srgb, var(--card-bg) 90%, var(--accent-main));} /* Added hover effect */
+    .btn-muted{opacity:.7}
+    .chip{
+      border:1px solid var(--card-border);background:transparent;color:var(--text-secondary);
+      padding:.3rem .7rem;border-radius:14px;font-size:.8rem;cursor:pointer;
+      transition: all .2s; /* Added transition */
+    }
+    .chip:hover{border-color:var(--accent-main);color:var(--accent-main); background: color-mix(in srgb, var(--card-bg) 90%, var(--accent-main));} /* Added hover effect */
+    .chip[aria-pressed="true"]{background:var(--accent-main);color:#fff;border-color:var(--accent-main)}
+    .aa-modes{display:flex;gap:.4rem;flex-wrap:wrap;margin:.8rem 0}
+
+    .aa-output{
+      margin-top:1rem;padding:1rem;border:1px solid var(--card-border);
+      border-radius:8px;background:var(--bg-color);max-height:380px;overflow:auto;
+      font-size:.9rem;white-space:pre-wrap;
+      line-height: 1.5; /* Adjusted for better readability */
+    }
+    .aa-output p { /* Added for markdown paragraphs */
+      margin-top: 0.5em;
+      margin-bottom: 0.5em;
+    }
+    .aa-output ul { /* Added for markdown lists */
+      margin: 0.5em 0;
+      padding-left: 1.5em;
+      list-style: disc;
+    }
+    .aa-output li { /* Added for markdown list items */
+      margin-bottom: 0.2em;
+    }
+
+    .aa-cta{
+      margin-top:1rem;display:flex;gap:.8rem;flex-wrap:wrap;font-size:.85rem;
+      border-top:1px solid var(--card-border);padding-top:.8rem;color:var(--text-secondary);
+    }
+    .aa-cta a{color:var(--accent-main)}
+    .aa-cta a:hover { color: var(--accent-sub); } /* Added hover for CTA links */
+
+    #aa-fab{
+      position:fixed;bottom:1.5rem;left:1.5rem;z-index:12;
+      width:48px;height:48px;border-radius:50%;
+      border:1px solid var(--card-border);background:var(--card-bg);
+      color:var(--text-primary);font-size:1.2rem;cursor:pointer;
+      box-shadow:var(--shadow-md);
+      display: flex; /* Centering content */
+      justify-content: center; /* Centering content */
+      align-items: center; /* Centering content */
+      transition: all .2s; /* Added transition */
+    }
+    #aa-fab:hover{color:var(--accent-main);border-color:var(--accent-main); box-shadow: 0 0 15px var(--accent-main);} /* Added hover effect */
+    /* Mobile FAB – show 💬 icon, hide “?” (Section 4) */
+    @media(max-width:640px){
+      #aa-fab::before{content:'💬';font-size:1.4rem;}
+      #aa-fab>span{display:none}
+    }
+
+    /* Ask Arsalan specific styles for question buttons */
+    .aa-question-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+      margin-top: 1rem;
+    }
+    .aa-question-list button {
+      width: 100%;
+      text-align: left;
+      padding: 0.8rem 1rem;
+      border: 1px solid var(--card-border);
+      border-radius: 6px;
+      background: var(--card-bg);
+      color: var(--text-primary);
+      cursor: pointer;
+      font-size: 1rem;
+      transition: all .2s;
+      display: flex; /* For emoji alignment */
+      align-items: center; /* For emoji alignment */
+      gap: 0.5rem; /* Space between emoji and text */
+    }
+    .aa-question-list button:hover {
+      border-color: var(--accent-main);
+      color: var(--accent-main);
+      background: color-mix(in srgb, var(--card-bg) 90%, var(--accent-main));
+    }
+    .aa-question-list button .emoji {
+      font-size: 1.2em; /* Slightly larger emoji */
+    }
+
+    /* New style for answer output directly below question */
+    .aa-answer {
+      margin-top: 0.8rem; /* Smaller margin to make it compact */
+      padding: 1rem;
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      background: var(--bg-color);
+      font-size: 0.9rem;
+      line-height: 1.5;
+      animation: fadeIn 0.3s ease-out; /* Simple fade-in animation */
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
   </style>
 </head>
-<body class="antialiased">
+<body>
 
-  <!-- Sticky Nav -->
-  <nav class="fixed top-0 inset-x-0 z-40 backdrop-blur bg-[var(--bg)]/80 border-b border-[var(--border)]">
-    <div class="max-w-5xl mx-auto px-4 py-2 flex items-center justify-between text-sm">
-      <div class="flex gap-4">
-        <a href="#about" class="hover:text-[var(--accent)]">About</a>
-        <a href="#skills" class="hover:text-[var(--accent)]">Skills</a>
-        <a href="#badges" class="hover:text-[var(--accent)]">Badges</a>
-        <a href="#timeline" class="hover:text-[var(--accent)]">Timeline</a>
-        <a href="#domains" class="hover:text-[var(--accent)]">Domains</a>
-        <a href="#projects" class="hover:text-[var(--accent)]">Projects</a>
-        <a href="#education" class="hover:text-[var(--accent)]">Education</a>
+  <!-- Accessibility: Add role="banner" (Section 5) -->
+  <header class="hero" role="banner">
+    <div class="container">
+      <div class="hero-content">
+        <div class="profile-picture">
+          <img src="https://avatars.githubusercontent.com/u/7464350?v=4" alt="Arsalan Arif Khan Profile Picture"
+               onerror="this.onerror=null;this.src='https://placehold.co/160x160/E2E8F0/4A5568?text=AAK';">
+        </div>
+        <div class="profile-info">
+          <h1>Arsalan Arif Khan</h1>
+          <p>Documentation Systems Architect · Senior Technical Writer · AI Knowledge Engineering</p>
+          <div class="contact-info">
+            <a href="tel:14253189796">
+              <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><title>Phone icon</title><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+              425.318.9796
+            </a>
+            <a href="mailto:arifkhanarsalan@gmail.com">
+              <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><title>Email icon</title><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+              arifkhanarsalan@gmail.com
+            </a>
+            <a href="https://linkedin.com/in/timedilation" target="_blank" rel="noopener">
+              <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><title>LinkedIn icon</title><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+              linkedin.com/in/timedilation
+            </a>
+            <a href="https://github.com/timedilationv2" target="_blank" rel="noopener">
+              <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><title>GitHub icon</title><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+              github.com/timedilationv2
+            </a>
+          </div>
+        </div>
       </div>
-      <button id="toggleTheme" class="px-2 py-1 border border-[var(--border)] rounded text-xs hover:bg-[var(--accent-20)] focus:outline-none">
-        Toggle theme
-      </button>
+    </div>
+  </header>
+
+  <!-- Accessibility: Add role="navigation" (Section 5) -->
+  <nav class="main-nav" role="navigation">
+    <div class="container">
+      <div class="nav-links">
+        <a href="#summary">Summary</a>
+        <a href="#skills">Skills</a>
+        <a href="#experience">Experience</a>
+        <a href="#education">Education</a>
+        <a href="#ask-arsalan">Ask Arsalan</a>
+      </div>
     </div>
   </nav>
 
-  <main class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-16 space-y-20">
-
-    <!-- Header -->
-    <header class="flex flex-col sm:flex-row justify-between items-start sm:items-center fade-in">
-      <div>
-        <h1 class="text-4xl sm:text-5xl font-bold tracking-tight">Arsalan Khan</h1>
-        <p class="text-xl sm:text-2xl font-medium mt-1 text-[var(--accent)]">Generative AI &amp; Systems Architect</p>
-      </div>
-      <div class="mt-4 sm:mt-0 flex flex-col sm:items-end space-y-2 text-sm text-[var(--muted)]">
-        <a href="tel:425-318-9796" class="hover:text-[var(--accent)] transition-colors">☎️ (425) 318-9796</a>
-        <a href="mailto:arifkhanarsalan@gmail.com" class="hover:text-[var(--accent)] transition-colors">✉️ arifkhanarsalan@gmail.com</a>
-        <a href="https://www.linkedin.com/in/timedilation" target="_blank" class="hover:text-[var(--accent)] transition-colors">🔗 linkedin.com/in/timedilation</a>
-        <a href="https://github.com/timedilationv2" target="_blank" class="hover:text-[var(--accent)] transition-colors">👨‍💻 github.com/timedilationv2</a>
-      </div>
-    </header>
-
-    <!-- About -->
-    <section id="about" class="fade-in space-y-5">
-      <h2 class="text-3xl font-bold mb-2 section-title pb-4">About</h2>
-      <p class="leading-relaxed text-lg">
-        I architect intelligent information systems: docs-as-code pipelines, AI-assisted content engines, and developer-first platforms.
-        My path runs from structuring engineering data (aerospace, energy) to building generative systems that write, organize, and ship technical knowledge.
+  <!-- Accessibility: Add role="main" (Section 5) -->
+  <main class="container" role="main">
+    <section id="summary" class="card">
+      <h2>
+        <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><title>Executive Snapshot icon</title><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><polyline points="13 2 13 9 20 9"></polyline></svg>
+        Executive Snapshot
+      </h2>
+      <p>
+        <strong>Documentation Systems Architect & Senior Technical Writer.</strong>
+        I design and operationalize developer-facing knowledge systems—API references, runbooks,
+        CI/CD docs, internal tooling guides—treating documentation as product, not paperwork.
+        Eight+ years across SaaS, DevOps, and regulated domains (aviation, finance) taught me to
+        ship clarity under constraints: auditability, compliance, and velocity.
       </p>
-      <p class="leading-relaxed text-lg">
-        I bring a builder’s bias: I don’t just document systems—I design them. Zleo AI is my current focus: an automated, intelligent documentation stack that treats clarity as infrastructure.
+      <p>
+        My toolkit blends Markdown/OpenAPI, GitHub Actions, and lightweight automation (Python/CLI)
+        to keep docs living where engineers live. I bridge product, platform, and support teams—
+        mapping chaos into modular, versioned, reviewable content that scales.
       </p>
-    </section>
 
-    <!-- Skills -->
-    <section id="skills" class="fade-in">
-      <h2 class="text-3xl font-bold mb-6 section-title pb-4">Core Competencies</h2>
-      <p class="text-center text-[var(--muted)] mb-6">Visual snapshot of proficiency.</p>
-      <div class="chart-wrap"><canvas id="skillsChart"></canvas></div>
-    </section>
-
-    <!-- Badges -->
-    <section id="badges" class="fade-in">
-      <h2 class="text-3xl font-bold mb-6 section-title pb-4">Credentials &amp; Badges</h2>
-      <div id="badgesBox" class="flex flex-wrap justify-center gap-3"></div>
-    </section>
-
-    <!-- Timeline -->
-    <section id="timeline" class="fade-in">
-      <h2 class="text-3xl font-bold mb-8 section-title pb-4">Career Timeline</h2>
-      <div id="timelineBox" class="space-y-4"></div>
-    </section>
-
-    <!-- Domains -->
-    <section id="domains" class="fade-in">
-      <h2 class="text-3xl font-bold mb-6 section-title pb-4">Experience by Domain</h2>
-      <p class="text-center text-[var(--muted)] mb-6">Years spent across industries.</p>
-      <div class="chart-wrap max-w-2xl h-64"><canvas id="domainChart"></canvas></div>
-    </section>
-
-    <!-- Projects -->
-    <section id="projects" class="fade-in">
-      <h2 class="text-3xl font-bold mb-8 section-title pb-4">Key Projects</h2>
-      <div id="projectsGrid" class="grid md:grid-cols-2 gap-6"></div>
-    </section>
-
-    <!-- Education -->
-    <section id="education" class="fade-in">
-      <h2 class="text-3xl font-bold mb-6 section-title pb-4">Education</h2>
-      <div class="bg-white dark:bg-[var(--bg)] border border-[var(--border)] p-6 rounded-lg shadow-sm">
-        <h3 class="text-lg font-bold">Bachelor of Applied Science (BASc)</h3>
-        <p class="text-[var(--accent)] font-medium">Business, Management, and Technical Communication</p>
-        <p class="text-sm text-[var(--muted)] mt-1">Karachi University — Graduated 2012</p>
+      <div class="how-i-work">
+        <h3>How I Work</h3>
+        <ul>
+          <li><strong>Systems First:</strong> Information architecture before words—docs slot into pipelines, not silos.</li>
+          <li><strong>Docs-as-Code:</strong> Git, CI, linters, and PRs maintain a single source of truth.</li>
+          <li><strong>Developer Empathy:</strong> Write like you’re on-call tomorrow—concise, grep-able, actionable.</li>
+          <li><strong>Automation Mindset:</strong> Script the repetitive; formalize the tribal knowledge.</li>
+          <li><strong>Cross-Functional Glue:</strong> Translate SME dumps into tested procedures and self-serve guides.</li>
+        </ul>
       </div>
     </section>
 
-    <footer class="text-center text-[var(--muted)] text-sm mt-12 fade-in">
-      <p>Built with HTML, Tailwind, and Chart.js.</p>
-      <p>© 2025 Arsalan Khan.</p>
-    </footer>
+    <section id="skills" class="card">
+      <h2>
+        <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><title>Skills icon</title><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg>
+        Core Competencies
+      </h2>
+      <div class="skill-tabs" role="tablist" aria-label="Skill categories"></div>
+      <div class="skills-content" role="tabpanel"></div>
+    </section>
+
+    <section id="experience" class="card">
+      <h2>
+        <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><title>Experience icon</title><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
+        Professional Experience
+      </h2>
+      <div id="experience-container" class="exp-list"></div>
+    </section>
+
+    <section id="education" class="card">
+      <h2>
+        <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><title>Education icon</title><path d="M22 10v6M2 10l10-5 10 5-10 5z"></path><path d="M6 12v5c3.33 1.67 6.67 1.67 10 0v-5"></path></svg>
+        Education & Certifications
+      </h2>
+      <div class="edu-grid">
+        <article class="edu-card">
+          <h3>Karachi University</h3>
+          <p class="emph">BASc – Technical, Scientific, & Business Writing</p>
+          <p class="meta">Mar 2008 – Jun 2011 · Karachi, Pakistan</p>
+        </article>
+
+        <article class="edu-card">
+          <h3>Independent Study (Full-Time)</h3>
+          <p class="emph">Systems Architecture, Automation, Cloud, AI, Neuroinformatics, Documentation Design</p>
+          <p class="meta">Project-based learning across DevOps, documentation infra, and AI tools</p>
+        </article>
+
+        <article class="edu-card">
+          <h3>Certifications</h3>
+          <ul class="cert-list">
+            <li>Project Management – Google / Coursera (Feb 2023)</li>
+            <li>AWS Certified – Coursera</li>
+            <li>Microsoft Certified Solutions Associate: Linux on Azure</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <!-- Ask Arsalan Section -->
+    <section id="ask-arsalan" class="card">
+      <h2>
+        <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>Ask Arsalan icon</title><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V3a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+        Ask Arsalan
+      </h2>
+
+      <!-- Teaser / collapsed input -->
+      <div id="aa-teaser">
+        <p style="margin-top:0; margin-bottom: 1rem;">Have a question about my background? Choose one below:</p>
+        <div class="aa-question-list">
+          <button class="aa-question-btn" data-question-id="docs-as-code"><span class="emoji">✍️</span> Tell me about your experience with docs-as-code.</button>
+          <button class="aa-question-btn" data-question-id="chevron-summary"><span class="emoji">🏦</span> Summarize your work at Chevron Federal Credit Union.</button>
+          <button class="aa-question-btn" data-question-id="developer-empathy"><span class="emoji">🤝</span> What is your approach to developer empathy?</button>
+          <button class="aa-question-btn" data-question-id="skittly-project"><span class="emoji">🤖</span> Can you tell me about your project Skittly?</button>
+        </div>
+        <div style="margin-top:1.5rem; text-align: center;">
+          <button class="aa-open btn">Open Panel for more questions</button>
+        </div>
+      </div>
+
+      <!-- Expanded panel -->
+      <div id="aa-panel" hidden>
+        <p style="margin-top:0; margin-bottom: 1rem;">Select a question to learn more:</p>
+        <div class="aa-question-list">
+          <button class="aa-question-btn" data-question-id="summary"><span class="emoji">📄</span> What is your overall professional summary?</button>
+          <button class="aa-question-btn" data-question-id="docs-as-code"><span class="emoji">✍️</span> Tell me about your experience with docs-as-code.</button>
+          <button class="aa-question-btn" data-question-id="chevron-summary"><span class="emoji">🏦</span> Summarize your work at Chevron Federal Credit Union.</button>
+          <button class="aa-question-btn" data-question-id="developer-empathy"><span class="emoji">🤝</span> What is your approach to developer empathy?</button>
+          <button class="aa-question-btn" data-question-id="skittly-project"><span class="emoji">🤖</span> Can you tell me about your project Skittly?</button>
+          <button class="aa-question-btn" data-question-id="cloud-devops"><span class="emoji">☁️</span> What are your core competencies in Cloud & DevOps?</button>
+          <button class="aa-question-btn" data-question-id="avic-summary"><span class="emoji">✈️</span> Summarize your experience at AVIC Heavy Machinery Co., Ltd.</button>
+          <button class="aa-question-btn" data-question-id="education-certs"><span class="emoji">🎓</span> Tell me about your education and certifications.</button>
+        </div>
+        
+        <div id="aa-output" class="aa-output" aria-live="polite"></div> <!-- Live region for screen-reader output (Section 4) -->
+
+        <div style="margin-top:1.5rem;display:flex;justify-content:center;gap:.5rem;flex-wrap:wrap;">
+          <button class="aa-close btn-muted">Close Panel</button>
+        </div>
+
+        <div class="aa-cta">
+          <span>Let’s talk:</span>
+          <a href="https://linkedin.com/in/timedilation" target="_blank" rel="noopener">Connect</a>
+          <a href="mailto:arifkhanarsalan@gmail.com?subject=Let%E2%80%99s%20chat">Email</a>
+          <a href="https://calendar.google.com/calendar/u/0/r/eventedit?text=Meet+Arsalan&details=Let%27s+chat" target="_blank" rel="noopener">Book</a>
+        </div>
+      </div>
+    </section>
   </main>
 
-  <script>
-    // ---------- DATA BLOCK (edit here) ----------
-    const DATA = {
-      skills: {
-        labels: ['Gen AI & Automation', 'Systems Architecture', 'Cloud & DevOps', 'Technical Writing', 'Developer Tooling'],
-        values: [9, 9, 7, 8, 8]
-      },
-      badges: [
-        { label: 'Google Cloud Certified', url: 'https://img.shields.io/badge/Google%20Cloud-Certified-4285F4?style=for-the-badge&logo=googlecloud&logoColor=white' },
-        { label: 'AWS Certified', url: 'https://img.shields.io/badge/AWS-Certified-FF9900?style=for-the-badge&logo=amazonaws&logoColor=white' },
-        { label: 'OpenAI API Specialist', url: 'https://img.shields.io/badge/OpenAI-API%20Specialist-412991?style=for-the-badge&logo=openai&logoColor=white' },
-        { label: 'PMP Certified', url: 'https://img.shields.io/badge/PMP-Certified-003366?style=for-the-badge&logo=projectmanagement&logoColor=white' }
-      ],
-      experience: [
-        {
-          title: 'Founder & Lead Architect',
-          company: 'Zleo AI (Startup)',
-          date: '2023 – Present',
-          bullets: [
-            'Built a GenAI platform to automate technical documentation & content ops',
-            'Architected scalable infra on GCP/AWS for model integration & data pipelines',
-            'Own product from concept → MVP; focus: intelligent knowledge systems'
-          ]
-        },
-        {
-          title: 'Procedure Writer (Contract)',
-          company: 'Chevron',
-          date: '2022 – 2023',
-          bullets: [
-            'Standardized high-stakes operational procedures for financial systems',
-            'Translated SME workflows into audit-ready documentation',
-            'Applied DITA/XML for reusable, modular procedure sets'
-          ]
-        },
-        {
-          type: 'event',
-          icon: '✈️',
-          title: 'Moved to the United States',
-          date: '2021',
-          description: 'Relocated to the Greater Seattle Area for US tech industry opportunities'
-        },
-        {
-          title: 'Documentation Architect',
-          company: 'AVIC (Aviation Industry Corp. of China)',
-          date: '2018 – 2021',
-          bullets: [
-            'Designed a centralized docs-as-code system for engineering',
-            'Migrated legacy formats to Markdown + Git + custom SSG pipeline',
-            'Cut update cycles ~60% via CI/CD automation and version control'
-          ]
-        },
-        {
-          title: 'Senior Technical Writer',
-          company: 'Power China',
-          date: '2015 – 2018',
-          bullets: [
-            'Authored manuals for GE turbines & large energy infra projects',
-            'Bridge between international engineering and local field ops',
-            'Structured complex engineering data for reuse across docs'
-          ]
-        },
-        {
-          title: 'Technical Writer',
-          company: 'CATIC (Aerospace)',
-          date: '2012 – 2015',
-          bullets: [
-            'Produced avionics & component manuals from engineering diagrams',
-            'Translated specs into field-ready documentation',
-            'Built a reputation for precision and rapid technical ramp-up'
-          ]
-        }
-      ],
-      domains: {
-        labels: ['AI & Tech Startup', 'Aerospace', 'Energy & Infrastructure', 'Finance'],
-        values: [2, 7, 3, 1]
-      },
-      projects: [
-        {
-          title: 'Zleo AI Platform',
-          desc: 'Proprietary GenAI platform to automate creation & management of technical docs.',
-          tags: ['Gen AI', 'Python', 'GCP', 'AWS', 'Systems Architecture'],
-          github: 'https://github.com/timedilationv2',
-          live: null
-        },
-        {
-          title: 'Full-Stack Project Manager (Skittly)',
-          desc: 'MERN-stack app demonstrating full-stack dev & API docs chops.',
-          tags: ['React', 'Node.js', 'MongoDB', 'JavaScript'],
-          github: 'https://github.com/timedilationv2/skittly-frontend',
-          live: 'https://skittle-frontend.vercel.app/'
-        }
+  <div class="theme-switcher">
+    <button id="theme-dark-btn" aria-label="Switch to light theme">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>Dark theme icon</title><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+    </button>
+    <button id="theme-light-btn" aria-label="Switch to dark theme">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>Light theme icon</title><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+    </button>
+  </div>
+
+  <!-- Floating FAB -->
+  <button id="aa-fab" aria-label="Ask Arsalan">?</button>
+
+  <!-- Accessibility: Add role="contentinfo" (Section 5) -->
+  <footer role="contentinfo">
+    <div class="container">
+      <p>Built with code and intent. © 2025 Arsalan Khan.</p>
+    </div>
+  </footer>
+
+  <!-- Data blocks for Skills and Experience - pulled from 3.html approach -->
+  <script type="application/json" id="skills-data">
+  {
+    "Documentation & Writing": [
+      "Docs-as-Code (Markdown, Git)",
+      "REST / OpenAPI References",
+      "Runbooks & SOPs",
+      "Information Architecture",
+      "Modular Content Design"
+    ],
+    "Developer Tooling": [
+      "CLI Workflows",
+      "FastAPI / Node.js",
+      "React / Next.js",
+      "JSON, YAML, Bash"
+    ],
+    "Cloud & DevOps": [
+      "GitHub Actions / GitLab CI",
+      "GCP & AWS Basics",
+      "Docker & Containers",
+      "Kubernetes (Familiarity)"
+    ],
+    "AI & Automation": [
+      "OpenAI API",
+      "Prompt Workflows",
+      "Python Automation",
+      "Webhook & GitOps Pipelines"
+    ],
+    "Cross-Functional": [
+      "Systems Thinking",
+      "Agile Documentation",
+      "SME Collaboration",
+      "Developer Empathy",
+      "Change Management Support"
+    ]
+  }
+  </script>
+
+  <script type="application/json" id="exp-data">
+  [
+    {
+      "title":"Technical Writer – Freelance",
+      "company":"Open-Source Contributor",
+      "date":"Feb 2023 – Present",
+      "open":true,
+      "contributions":[
+        "Built and maintained <strong>docs-as-code systems</strong> using Markdown, Git, and GitHub Actions.",
+        "Authored API references, onboarding guides, and internal runbooks for <strong>open-source developer tools</strong>.",
+        "Collaborated with maintainers across the <strong>GitHub/CNCF ecosystem</strong> to standardize contribution docs.",
+        "Automated pipelines with <strong>CI workflows and modular content packs</strong> to reduce manual doc drift.",
+        "Optimized contributor experience with <strong>PR templates, linters, and review checklists</strong>."
       ]
-    };
-
-    // ---------- THEME TOGGLE ----------
-    const toggleBtn = document.getElementById('toggleTheme');
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    if (prefersDark) document.documentElement.classList.add('dark');
-    toggleBtn.addEventListener('click', () => document.documentElement.classList.toggle('dark'));
-
-    // ---------- FADE-IN OBSERVER ----------
-    const observer = new IntersectionObserver(entries => {
-      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
-    }, { threshold: .15 });
-    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
-
-    // ---------- RENDER BADGES ----------
-    const badgesBox = document.getElementById('badgesBox');
-    DATA.badges.forEach(b => {
-      const img = document.createElement('img');
-      img.src = b.url;
-      img.alt = b.label;
-      img.className = 'h-6';
-      badgesBox.appendChild(img);
-    });
-
-    // ---------- RENDER TIMELINE ----------
-    const timelineBox = document.getElementById('timelineBox');
-    DATA.experience.forEach((item, idx) => {
-      if (item.type === 'event') {
-        const ev = document.createElement('article');
-        ev.className = 'flex gap-4 items-start border border-[var(--border)] rounded-lg p-4 bg-[var(--accent-20)]';
-        ev.innerHTML = `
-          <div class="text-2xl">${item.icon || '📌'}</div>
-          <div>
-            <h3 class="font-bold">${item.title}</h3>
-            <p class="text-sm text-[var(--muted)]">${item.date}</p>
-            <p class="text-sm mt-1">${item.description}</p>
-          </div>`;
-        timelineBox.appendChild(ev);
-        return;
-      }
-
-      const acc = document.createElement('article');
-      acc.className = 'accordion border border-[var(--border)] rounded-lg p-6 bg-white dark:bg-[var(--bg)] shadow-sm';
-      acc.innerHTML = `
-        <button class="w-full flex justify-between items-center text-left focus:outline-none">
-          <div>
-            <h3 class="text-lg font-bold">${item.title}</h3>
-            <p class="text-[var(--accent)] font-medium">${item.company}</p>
-            <p class="text-sm text-[var(--muted)] mt-1">${item.date}</p>
-          </div>
-          <span class="ml-4 text-2xl rotate-0 transition-transform">+</span>
-        </button>
-        <div class="accordion-panel mt-4 border-t border-[var(--border)] pt-4">
-          <ul class="list-disc list-inside space-y-2 text-sm">
-            ${item.bullets.map(b => `<li>${b}</li>`).join('')}
-          </ul>
-        </div>`;
-      if (idx === 0) acc.classList.add('open');
-      timelineBox.appendChild(acc);
-    });
-
-    timelineBox.addEventListener('click', e => {
-      const btn = e.target.closest('button');
-      if (!btn) return;
-      const card = btn.parentElement;
-      card.classList.toggle('open');
-      const icon = btn.querySelector('span');
-      icon.style.transform = card.classList.contains('open') ? 'rotate(45deg)' : 'rotate(0deg)';
-    });
-
-    // ---------- RENDER PROJECTS ----------
-    const projectsGrid = document.getElementById('projectsGrid');
-    DATA.projects.forEach(p => {
-      const el = document.createElement('article');
-      el.className = 'border border-[var(--border)] rounded-lg p-6 bg-white dark:bg-[var(--bg)] shadow-sm flex flex-col';
-      el.innerHTML = `
-        <h3 class="text-lg font-bold mb-2">${p.title}</h3>
-        <p class="text-sm flex-grow">${p.desc}</p>
-        <div class="mt-4 flex flex-wrap gap-2">
-          ${p.tags.map(t => `<span class="badge">${t}</span>`).join('')}
-        </div>
-        <footer class="mt-4 pt-4 border-t border-[var(--border)] flex gap-4 text-sm">
-          <a class="hover:text-[var(--accent)]" href="${p.github}" target="_blank">GitHub ↗</a>
-          ${p.live ? `<a class="hover:text-[var(--accent)]" href="${p.live}" target="_blank">Live Demo ↗</a>` : ''}
-        </footer>`;
-      projectsGrid.appendChild(el);
-    });
-
-    // ---------- CHARTS ----------
-    const accent = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim();
-    const accent20 = getComputedStyle(document.documentElement).getPropertyValue('--accent-20').trim();
-
-    function renderCharts() {
-      // Skills Radar
-      new Chart(document.getElementById('skillsChart'), {
-        type: 'radar',
-        data: {
-          labels: DATA.skills.labels,
-          datasets: [{
-            data: DATA.skills.values,
-            backgroundColor: accent20,
-            borderColor: accent,
-            borderWidth: 2,
-            pointBackgroundColor: accent
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          scales: {
-            r: {
-              suggestedMin: 0, suggestedMax: 10,
-              angleLines: { color: 'var(--border)' },
-              grid: { color: 'var(--border)' },
-              pointLabels: { color: 'var(--fg)', font: { size: 12 } },
-              ticks: { backdropColor: 'var(--bg)', color: 'var(--muted)', stepSize: 2 }
-            }
-          },
-          plugins: { legend: { display: false } }
-        }
-      });
-
-      // Domain Bar
-      new Chart(document.getElementById('domainChart'), {
-        type: 'bar',
-        data: {
-          labels: DATA.domains.labels,
-          datasets: [{
-            label: 'Years',
-            data: DATA.domains.values,
-            backgroundColor: accent20,
-            borderColor: accent,
-            borderWidth: 1
-          }]
-        },
-        options: {
-          indexAxis: 'y',
-          responsive: true,
-          maintainAspectRatio: false,
-          scales: {
-            x: {
-              beginAtZero: true,
-              grid: { display:false },
-              ticks: {
-                precision: 0,
-                callback: v => v + ' yrs',
-                color: 'var(--muted)'
-              }
-            },
-            y: {
-              grid: { display:false },
-              ticks: { color: 'var(--muted)' }
-            }
-          },
-          plugins: {
-            legend: { display:false },
-            tooltip: {
-              callbacks: { label: ctx => ` ~${ctx.raw} years` }
-            }
-          }
-        }
-      });
+    },
+    {
+      "title":"Procedure Writer",
+      "company":"Chevron Federal Credit Union (via Aston Carter)",
+      "date":"Sep 2022 – Feb 2023",
+      "contributions":[
+        "Developed structured SOPs for <strong>automation-driven workflows</strong> during a core-system modernization.",
+        "Translated SME input into <strong>clear, audit-ready procedures</strong> under strict compliance timelines.",
+        "Built reusable templates to enforce <strong>long-term consistency and revision control</strong>.",
+        "Streamlined internal ops through <strong>step-by-step procedural documentation</strong> for non-technical staff.",
+        "Supported change management with <strong>logic mapping and stakeholder walkthroughs</strong>."
+      ]
+    },
+    {
+      "title":"Technical Writer",
+      "company":"AVIC Heavy Machinery Co., Ltd.",
+      "date":"Jan 2016 – Jan 2020 · Hybrid · Pakistan",
+      "contributions":[
+        "Documented inspection results for <strong>jet engine systems, avionics suites, and fuselage components</strong>.",
+        "Translated engineering schematics into <strong>flight-readiness and compliance reports</strong>.",
+        "Maintained a revision-controlled archive of <strong>inspection records and technical diagrams</strong>.",
+        "Supported digital handover and <strong>technical review workflows</strong> between OEM and field teams.",
+        "Acted as liaison between <strong>Chinese aerospace engineers and Pakistani field crews</strong>."
+      ]
+    },
+    {
+      "title":"Technical Writer – Equipment Inspection & Energy Systems",
+      "company":"AVIC Heavy Machinery",
+      "date":"Mar 2014 – Jan 2016 · Hybrid · Pakistan",
+      "contributions":[
+        "Inspected <strong>GE Frame turbines and Wärtsilä systems</strong> across multiple facilities.",
+        "Authored <strong>maintenance manuals, inspection reports, and system handover docs</strong>.",
+        "Produced translated diagrams and <strong>configuration reference sheets</strong> for engineering teams.",
+        "Delivered structured reports for <strong>client-facing audits and internal QA</strong>.",
+        "Ensured alignment with <strong>international compliance and quality standards</strong>."
+      ]
+    },
+    {
+      "title":"Copywriter",
+      "company":"Qubee ISP",
+      "date":"May 2012 – Feb 2014 · On-site · Karachi, Pakistan",
+      "contributions":[
+        "Created FAQs, setup guides, and <strong>printed support content</strong> for field/CS teams.",
+        "Translated service details into <strong>accessible, user-friendly language</strong>.",
+        "Standardized tone across <strong>brochures, SMS alerts, and in-store signage</strong>.",
+        "Supported rebranding efforts with <strong>tone-of-voice alignment</strong>.",
+        "Produced comparisons, guides, and troubleshooting content for <strong>broadband services</strong>."
+      ]
     }
+  ]
+  </script>
 
-    renderCharts();
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // --- Helper Functions ---
+      const $ = sel => document.querySelector(sel);
+      const $$ = sel => document.querySelectorAll(sel);
 
-    // Re-render charts on theme change (Chart.js doesn't auto-recalc colors)
-    const observerTheme = new MutationObserver(() => {
-      // crude but simple: reload to redraw with new CSS vars
-      // drop if you don't care about recoloring on toggle
-      // location.reload();
+      // --- Theme Manager ---
+      const lightThemeBtn = $('#theme-light-btn');
+      const darkThemeBtn = $('#theme-dark-btn');
+      const userTheme = localStorage.getItem('theme');
+
+      const applyTheme = (theme) => {
+        document.documentElement.setAttribute('data-theme', theme);
+      };
+
+      // Set initial theme based on local storage or system preference
+      const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      applyTheme(userTheme || systemTheme);
+
+      lightThemeBtn.addEventListener('click', () => {
+        localStorage.setItem('theme', 'dark');
+        applyTheme('dark');
+      });
+      darkThemeBtn.addEventListener('click', () => {
+        localStorage.setItem('theme', 'light');
+        applyTheme('light');
+      });
+
+      // --- Skills Section Logic ---
+      const skillsData = JSON.parse($('#skills-data').textContent);
+      const skillTabsContainer = $('.skill-tabs');
+      const skillsContentArea = $('.skills-content');
+      const skillCategories = Object.keys(skillsData);
+
+      // Render skill tabs
+      skillCategories.forEach((cat, i) => {
+        const button = document.createElement('button');
+        button.setAttribute('role', 'tab');
+        button.setAttribute('aria-selected', i === 0 ? 'true' : 'false');
+        button.textContent = cat;
+        button.addEventListener('click', () => {
+          // Deactivate all tabs
+          skillTabsContainer.querySelectorAll('button').forEach(btn => btn.setAttribute('aria-selected', 'false'));
+          // Activate clicked tab
+          button.setAttribute('aria-selected', 'true');
+          // Update skills content with a fade effect
+          skillsContentArea.style.opacity = 0;
+          setTimeout(() => {
+            skillsContentArea.innerHTML = skillsData[cat].map(s => `<span class="skill-pill">${s}</span>`).join('');
+            skillsContentArea.style.opacity = 1;
+          }, 150); // Small delay for fade out/in effect
+        });
+        skillTabsContainer.appendChild(button);
+      });
+
+      // Initial render of skills content
+      skillsContentArea.innerHTML = skillsData[skillCategories[0]].map(s => `<span class="skill-pill">${s}</span>`).join('');
+      skillsContentArea.style.transition = 'opacity .2s'; // Add transition for smooth fade
+
+      // --- Experience Section Logic ---
+      const experienceData = JSON.parse($('#exp-data').textContent);
+      const experienceContainer = $('#experience-container');
+
+      experienceData.forEach(job => {
+        const detailsElement = document.createElement('details');
+        if (job.open) {
+          detailsElement.open = true;
+        }
+
+        const summaryElement = document.createElement('summary');
+        summaryElement.innerHTML = `
+          <div>
+            <h3>${job.title}</h3>
+            <p class="exp-meta"><span class="exp-company">${job.company}</span> · ${job.date}</p>
+          </div>
+          <span class="summary-chevron" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          </span>
+        `;
+
+        const detailsContentDiv = document.createElement('div');
+        detailsContentDiv.className = 'exp-details';
+        detailsContentDiv.innerHTML = `
+          <p><strong>Key Contributions:</strong></p>
+          <ul>${job.contributions.map(c => `<li>${c}</li>`).join('')}</ul>
+        `;
+
+        detailsElement.appendChild(summaryElement);
+        detailsElement.appendChild(detailsContentDiv);
+        experienceContainer.appendChild(detailsElement);
+      });
+
+      // --- Scrollspy for Navigation (Active State) ---
+      const navLinks = $$('.main-nav a');
+      const sections = Array.from($$('main > section[id]')); // Get all main sections with an ID
+
+      const activateNavOnScroll = () => {
+        const scrollPosition = window.scrollY;
+
+        // Find the section currently in view or closest to the top
+        const currentSection = sections.find(section =>
+          scrollPosition >= section.offsetTop - 100 && /* Offset to activate before section reaches very top */
+          scrollPosition < section.offsetTop + section.offsetHeight - 100
+        );
+
+        navLinks.forEach(link => {
+          link.classList.remove('active');
+          if (currentSection && link.getAttribute('href') === `#${currentSection.id}`) {
+            link.classList.add('active');
+          }
+        });
+      };
+
+      // Listen for scroll events and run on initial load
+      window.addEventListener('scroll', activateNavOnScroll, { passive: true });
+      activateNavOnScroll();
+
+      // --- Ask Arsalan Section Logic ---
+      const panel   = $('#aa-panel');
+      const teaser  = $('#aa-teaser');
+      const fab     = $('#aa-fab');
+      
+      // Pre-defined questions (same as before)
+      const preDefinedQuestions = [
+        { text: "What is your overall professional summary?", id: "summary", emoji: "📄" },
+        { text: "Tell me about your experience with docs-as-code.", id: "docs-as-code", emoji: "✍️" },
+        { text: "Summarize your work at Chevron Federal Credit Union.", id: "chevron-summary", emoji: "🏦" },
+        { text: "What is your approach to developer empathy?", id: "developer-empathy", emoji: "🤝" },
+        { text: "Can you tell me about your project Skittly?", id: "skittly-project", emoji: "🤖" },
+        { text: "What are your core competencies in Cloud & DevOps?", id: "cloud-devops", emoji: "☁️" },
+        { text: "Summarize your experience at AVIC Heavy Machinery Co., Ltd.", id: "avic-summary", emoji: "✈️" },
+        { text: "Tell me about your education and certifications.", id: "education-certs", emoji: "🎓" }
+      ];
+
+      // Define CTA links
+      const CONNECT_LINK = "https://linkedin.com/in/timedilation";
+      const MESSAGE_LINK = "mailto:arifkhanarsalan@gmail.com?subject=Let%E2%80%99s%20chat";
+      const EMAIL_LINK = "mailto:arifkhanarsalan@gmail.com";
+      const BOOK_LINK = "https://calendar.google.com/calendar/u/0/r/eventedit?text=Meet+Arsalan&details=Let%27s+chat";
+
+      // Update CTA links in the HTML
+      $('.aa-cta a[href*="linkedin.com"]').href = CONNECT_LINK;
+      $('.aa-cta a[href*="mailto:arifkhanarsalan@gmail.com?subject"]').href = MESSAGE_LINK;
+      $('.aa-cta a[href*="calendar.google.com"]').href = BOOK_LINK;
+
+      // Predetermined Answers based on provided data and GitHub info
+      const predefinedAnswers = {
+        "summary": `I architect documentation systems that function like scalable software—versioned, modular, executable, and intelligence-ready. My portfolio includes API and developer documentation, compliance-aligned SOPs, AI agent workflows, biotech protocol structuring, and automation pipelines tailored for startups and enterprise. (See: Executive Snapshot → Positioning Statement)
+        <br><br>
+        — Want to talk? <a href="${CONNECT_LINK}" target="_blank">Connect</a> · <a href="${MESSAGE_LINK}">Message</a> · <a href="${EMAIL_LINK}">Email</a>`,
+
+        "docs-as-code": `Docs-as-Code means treating documentation like software: versioned, modular, and built into automated pipelines. My work involves using Git, CI/CD, and Markdown to maintain a single source of truth for documentation. (See: How I Work → Docs-as-Code)
+        <br><br>
+        For example, I built and maintained docs-as-code systems using Markdown, Git, and GitHub Actions for open-source developer tools. This helped automate documentation pipelines and reduce drift. (See: Professional Experience → Technical Writer – Freelance → bullet 1)
+        <br><br>
+        — Want to talk? <a href="${CONNECT_LINK}" target="_blank">Connect</a> · <a href="${MESSAGE_LINK}">Message</a> · <a href="${EMAIL_LINK}">Email</a>`,
+
+        "chevron-summary": `At Chevron Federal Credit Union, I modernized their internal procedure library and SOP suite. This involved structuring templates, adding audit tracking, and normalizing terminology to reduce ambiguity in a highly regulated financial environment. (See: Selected Engagements & Extensions → Chevron Federal Credit Union)
+        <br><br>
+        I developed structured SOPs for automation-driven workflows during a core-system modernization, ensuring clear, audit-ready procedures under strict compliance timelines. (See: Professional Experience → Procedure Writer → bullet 1)
+        <br><br>
+        — Want to talk? <a href="${CONNECT_LINK}" target="_blank">Connect</a> · <a href="${MESSAGE_LINK}">Message</a> · <a href="${EMAIL_LINK}">Email</a>`,
+
+        "developer-empathy": `Developer empathy means writing documentation as if you'll be on-call for it tomorrow. It focuses on creating concise, grep-able, and actionable content that directly helps developers solve problems. (See: How I Work → Developer Empathy)
+        <br><br>
+        My aim is to bridge writing and engineering, bringing structure to chaos and enabling teams to scale with confidence, always considering the user's perspective. (See: Executive Snapshot → Professional Summary paragraph 2 in original HTML)
+        <br><br>
+        — Want to talk? <a href="${CONNECT_LINK}" target="_blank">Connect</a> · <a href="${MESSAGE_LINK}">Message</a> · <a href="${EMAIL_LINK}">Email</a>`,
+
+        "skittly-project": `Skittly is a project I built to simplify job application processes. It automatically generates personalized responses from job descriptions using OpenAI's AI models and a FastAPI backend. It's designed for efficient and effective job applications. (See: GitHub Repositories → timedilationv2/skittly)
+        <br><br>
+        This project showcases my skills in AI integration, FastAPI, and building streamlined workflows for developer tools. (See: Skills Matrix & Systems → Tooling & Stack Overview → FastAPI)
+        <br><br>
+        — Want to talk? <a href="${CONNECT_LINK}" target="_blank">Connect</a> · <a href="${MESSAGE_LINK}">Message</a> · <a href="${EMAIL_LINK}">Email</a>`,
+
+        "cloud-devops": `My core competencies in Cloud & DevOps include GitHub Actions / GitLab CI, Google Cloud Platform (GCP) and AWS basics (EC2, S3, IAM, CLI), Docker & Containerization, and familiarity with Kubernetes. I also understand infrastructure concepts like IaC-lite. (See: Skills → Cloud & DevOps tab)
+        <br><br>
+        I've automated documentation pipelines with CI workflows using GitHub Actions. (See: Professional Experience → Technical Writer – Freelance → bullet 4)
+        <br><br>
+        — Want to talk? <a href="${CONNECT_LINK}" target="_blank">Connect</a> · <a href="${MESSAGE_LINK}">Message</a> · <a href="${EMAIL_LINK}">Email</a>`,
+
+        "avic-summary": `At AVIC Heavy Machinery Co., Ltd., I worked on aerospace procedure engineering, converting complex diagrams into procedural documents for jet engine systems, avionics, and fuselage components. I ensured compliance and supported translation editions. (See: Selected Engagements & Extensions → AVIC Aircraft)
+        <br><br>
+        I also authored maintenance manuals and inspection reports for GE Frame turbines and Wärtsilä systems, ensuring documentation met international compliance and quality standards. (See: Professional Experience → Technical Writer – Equipment Inspection & Energy Systems → bullet 2 and 5)
+        <br><br>
+        — Want to talk? <a href="${CONNECT_LINK}" target="_blank">Connect</a> · <a href="${MESSAGE_LINK}">Message</a> · <a href="${EMAIL_LINK}">Email</a>`,
+
+        "education-certs": `I hold a Bachelor of Applied Science (BASc) in Technical, Scientific, & Business Writing from Karachi University. Additionally, I've completed full-time independent study in Systems Architecture, Automation, Cloud, AI, and Documentation Design. (See: Education & Certifications)
+        <br><br>
+        My certifications include Project Management from Google/Coursera, AWS Certified (Coursera), and Microsoft Certified Solutions Associate: Linux on Azure. (See: Education & Certifications → Certifications)
+        <br><br>
+        — Want to talk? <a href="${CONNECT_LINK}" target="_blank">Connect</a> · <a href="${MESSAGE_LINK}">Message</a> · <a href="${EMAIL_LINK}">Email</a>`
+      };
+
+      // Render questions in teaser and panel
+      const renderQuestions = (containerId, questions) => {
+        const container = $(containerId);
+        container.innerHTML = ''; // Clear existing content
+        questions.forEach(q => {
+          const button = document.createElement('button');
+          button.className = 'aa-question-btn';
+          button.dataset.questionId = q.id; // Use id to map to answers
+          button.innerHTML = `<span class="emoji">${q.emoji}</span> ${q.text}`; // Add emoji
+          container.appendChild(button);
+        });
+      };
+
+      // Initial render for teaser and full panel
+      renderQuestions('#aa-teaser .aa-question-list', preDefinedQuestions.slice(0, 4)); // Show first 4 in teaser
+      renderQuestions('#aa-panel .aa-question-list', preDefinedQuestions); // Show all in panel
+
+      // Open/close panel logic
+      $('.aa-open').onclick = () => { panel.hidden=false; teaser.hidden=true; output.innerHTML = ''; }; // Clear output on open
+      $('.aa-close').onclick = () => { panel.hidden=true; teaser.hidden=false; output.innerHTML = ''; }; // Clear output on close
+      fab.onclick = () => { panel.hidden=false; teaser.hidden=true; output.innerHTML = ''; }; // Clear output on FAB click
+
+      // Event listener for all question buttons
+      document.querySelectorAll('.aa-question-btn').forEach(button => {
+        button.addEventListener('click', async (event) => {
+          const questionId = event.target.dataset.questionId || event.target.closest('.aa-question-btn').dataset.questionId; // Handle clicks on emoji span
+
+          // Remove any existing answers
+          const existingAnswer = event.target.nextElementSibling;
+          if (existingAnswer && existingAnswer.classList.contains('aa-answer')) {
+            existingAnswer.remove();
+          }
+
+          // Create and insert new answer div
+          const answerDiv = document.createElement('div');
+          answerDiv.className = 'aa-answer';
+          answerDiv.innerHTML = '…thinking'; // Show thinking message
+          event.target.parentNode.insertBefore(answerDiv, event.target.nextSibling); // Insert right after the button
+
+          // Retrieve predetermined answer
+          const answer = predefinedAnswers[questionId];
+          if (answer) {
+            answerDiv.innerHTML = answer;
+          } else {
+            answerDiv.innerHTML = `Not in the data—happy to chat. <br><br> — Want to talk? <a href="${CONNECT_LINK}" target="_blank">Connect</a> · <a href="${MESSAGE_LINK}">Message</a> · <a href="${EMAIL_LINK}">Email</a>`;
+          }
+        });
+      });
     });
-    observerTheme.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
   </script>
 </body>
 </html>
