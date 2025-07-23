@@ -1,322 +1,409 @@
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interactive Resume | Arsalan Khan</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #111827; /* Tailwind gray-900 */
-            color: #D1D5DB; /* Tailwind gray-300 */
-        }
-        .skill-tab.active {
-            background-color: #3B82F6; /* Tailwind blue-500 */
-            color: #FFFFFF;
-        }
-        .section-title {
-            border-bottom: 2px solid #3B82F6;
-            padding-bottom: 0.5rem;
-            margin-bottom: 1.5rem;
-        }
-        .experience-item .details {
-            transition: max-height 0.5s ease-in-out, opacity 0.5s ease-in-out;
-            max-height: 0;
-            opacity: 0;
-            overflow: hidden;
-        }
-        .experience-item.open .details {
-            max-height: 1000px; /* Large enough for content */
-            opacity: 1;
-        }
-        .experience-item.open .icon {
-            transform: rotate(45deg);
-        }
-         .icon {
-            transition: transform 0.3s ease-in-out;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Arsalan Khan | Gen AI & Systems Architect</title>
+
+  <!-- Tailwind & Chart.js CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Lora:wght@400;600&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --accent: #4a6e8a;
+      --accent-20: rgba(74,110,138,.2);
+      --bg: #f8f7f4;
+      --fg: #333d42;
+      --muted: #6b7280;
+      --border: #d1d5db;
+    }
+    .dark {
+      --bg: #0f172a;
+      --fg: #e2e8f0;
+      --muted: #94a3b8;
+      --border: #334155;
+      --accent: #60a5fa;
+      --accent-20: rgba(96,165,250,.2);
+    }
+    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--fg); }
+    h1,h2,h3 { font-family: 'Lora', serif; }
+    .section-title { border-bottom: 1px solid var(--border); }
+    .fade-in { opacity:0; transform: translateY(16px); transition: opacity .5s ease, transform .5s ease; }
+    .fade-in.visible { opacity:1; transform: none; }
+    .accordion-panel { max-height:0; overflow:hidden; transition:max-height .4s ease; }
+    .accordion.open .accordion-panel { max-height:1000px; }
+    .badge { display:inline-flex; align-items:center; padding:.25rem .65rem; border-radius:9999px; font-size:.7rem; font-weight:600; border:1px solid var(--border); background:var(--accent-20); color:var(--accent);}
+    .chart-wrap { position:relative; width:100%; max-width:640px; margin:auto; height:320px; }
+    @media (min-width:768px){ .chart-wrap{height:360px;} }
+  </style>
 </head>
 <body class="antialiased">
 
-    <div class="container mx-auto max-w-6xl p-4 sm:p-6 lg:p-8">
-
-        <!-- Header Section -->
-        <header class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-12">
-            <div>
-                <h1 class="text-4xl sm:text-5xl font-bold text-white">ARSALAN KHAN</h1>
-                <p class="text-xl sm:text-2xl font-medium text-blue-400 mt-1">Technical Writer (Software, Avionics, Civil)</p>
-            </div>
-            <div class="mt-4 sm:mt-0 flex flex-col sm:items-end space-y-2 text-sm">
-                <a href="tel:425-318-9796" class="flex items-center space-x-2 text-gray-300 hover:text-blue-400 transition-colors">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
-                    <span>(425) 318-9796</span>
-                </a>
-                <a href="mailto:arifkhanarsalan@gmail.com" class="flex items-center space-x-2 text-gray-300 hover:text-blue-400 transition-colors">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
-                    <span>arifkhanarsalan@gmail.com</span>
-                </a>
-                <a href="https://www.linkedin.com/in/timedilation" target="_blank" class="flex items-center space-x-2 text-gray-300 hover:text-blue-400 transition-colors">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
-                    <span>linkedin.com/in/timedilation</span>
-                </a>
-                <a href="https://github.com/timedilationv2" target="_blank" class="flex items-center space-x-2 text-gray-300 hover:text-blue-400 transition-colors">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
-                    <span>github.com/timedilationv2</span>
-                </a>
-            </div>
-        </header>
-
-        <!-- Professional Summary -->
-        <section class="mb-12 bg-gray-800 p-6 rounded-lg shadow-lg">
-            <h2 class="text-2xl font-bold text-white mb-4 section-title">Professional Summary</h2>
-            <p class="text-gray-300 leading-relaxed">
-                Technical writer and systems builder with 8+ years of experience delivering high-impact documentation across SaaS, DevOps, Aviation, and Systems Engineering domains. I specialize in developer-first documentation systems that clarify complex workflows—API references, onboarding guides, CI/CD runbooks, and internal tools. Fluent in Markdown, OpenAPI, GitHub Actions, GCP, and docs-as-code workflows, I bring hands-on expertise in automating documentation pipelines and improving cross-functional collaboration between engineering, product, and support teams.
-            </p>
-            <p class="text-gray-300 leading-relaxed mt-4">
-                I thrive in environments where clarity, modularity, and real technical understanding drive documentation quality. My work bridges writing and engineering—bringing structure to chaos and enabling teams to scale with confidence.
-            </p>
-        </section>
-
-        <!-- Skills Section -->
-        <section class="mb-12">
-            <h2 class="text-2xl font-bold text-white section-title">Skills</h2>
-            <div class="flex flex-wrap gap-2 mb-6">
-                <button class="skill-tab active px-4 py-2 text-sm font-medium rounded-full bg-gray-700 hover:bg-blue-600 transition-colors" data-tab="doc-writing">Documentation & Writing</button>
-                <button class="skill-tab px-4 py-2 text-sm font-medium rounded-full bg-gray-700 hover:bg-blue-600 transition-colors" data-tab="dev-tooling">Developer Tooling</button>
-                <button class="skill-tab px-4 py-2 text-sm font-medium rounded-full bg-gray-700 hover:bg-blue-600 transition-colors" data-tab="cloud-devops">Cloud & DevOps</button>
-                <button class="skill-tab px-4 py-2 text-sm font-medium rounded-full bg-gray-700 hover:bg-blue-600 transition-colors" data-tab="ai-automation">AI & Automation</button>
-                <button class="skill-tab px-4 py-2 text-sm font-medium rounded-full bg-gray-700 hover:bg-blue-600 transition-colors" data-tab="cross-functional">Cross-Functional</button>
-            </div>
-            <div id="skills-content" class="bg-gray-800 p-6 rounded-lg shadow-lg min-h-[150px]">
-                <!-- Documentation & Writing -->
-                <div class="skill-content active" id="doc-writing">
-                    <div class="flex flex-wrap gap-3">
-                        <span class="bg-gray-700 text-blue-300 text-sm font-medium px-3 py-1 rounded-full">Docs-as-Code (Markdown, Git)</span>
-                        <span class="bg-gray-700 text-blue-300 text-sm font-medium px-3 py-1 rounded-full">REST API & OpenAPI Documentation</span>
-                        <span class="bg-gray-700 text-blue-300 text-sm font-medium px-3 py-1 rounded-full">Onboarding & Internal Guides</span>
-                        <span class="bg-gray-700 text-blue-300 text-sm font-medium px-3 py-1 rounded-full">Modular Help Center Design</span>
-                        <span class="bg-gray-700 text-blue-300 text-sm font-medium px-3 py-1 rounded-full">SOPs, Runbooks, & Knowledge Bases</span>
-                    </div>
-                </div>
-                <!-- Developer Tooling -->
-                <div class="skill-content hidden" id="dev-tooling">
-                    <div class="flex flex-wrap gap-3">
-                        <span class="bg-gray-700 text-blue-300 text-sm font-medium px-3 py-1 rounded-full">Terminal / CLI Workflows</span>
-                        <span class="bg-gray-700 text-blue-300 text-sm font-medium px-3 py-1 rounded-full">FastAPI / Node.js (light tools)</span>
-                        <span class="bg-gray-700 text-blue-300 text-sm font-medium px-3 py-1 rounded-full">React & Next.js (for docs portals)</span>
-                        <span class="bg-gray-700 text-blue-300 text-sm font-medium px-3 py-1 rounded-full">JSON, YAML, Bash</span>
-                    </div>
-                </div>
-                <!-- Cloud & DevOps -->
-                <div class="skill-content hidden" id="cloud-devops">
-                    <div class="flex flex-wrap gap-3">
-                        <span class="bg-gray-700 text-blue-300 text-sm font-medium px-3 py-1 rounded-full">GitHub Actions / GitLab CI</span>
-                        <span class="bg-gray-700 text-blue-300 text-sm font-medium px-3 py-1 rounded-full">Google Cloud Platform (GCP)</span>
-                        <span class="bg-gray-700 text-blue-300 text-sm font-medium px-3 py-1 rounded-full">AWS (EC2, S3, IAM, CLI)</span>
-                        <span class="bg-gray-700 text-blue-300 text-sm font-medium px-3 py-1 rounded-full">Docker & Containerization</span>
-                        <span class="bg-gray-700 text-blue-300 text-sm font-medium px-3 py-1 rounded-full">Kubernetes (basic familiarity)</span>
-                        <span class="bg-gray-700 text-blue-300 text-sm font-medium px-3 py-1 rounded-full">Infrastructure Concepts (IaC-lite)</span>
-                    </div>
-                </div>
-                <!-- AI & Automation -->
-                <div class="skill-content hidden" id="ai-automation">
-                    <div class="flex flex-wrap gap-3">
-                        <span class="bg-gray-700 text-blue-300 text-sm font-medium px-3 py-1 rounded-full">OpenAI API Integration</span>
-                        <span class="bg-gray-700 text-blue-300 text-sm font-medium px-3 py-1 rounded-full">LangChain / LLM Prompt Workflows</span>
-                        <span class="bg-gray-700 text-blue-300 text-sm font-medium px-3 py-1 rounded-full">Python + API Automation</span>
-                        <span class="bg-gray-700 text-blue-300 text-sm font-medium px-3 py-1 rounded-full">Webhook & GitOps Automations</span>
-                        <span class="bg-gray-700 text-blue-300 text-sm font-medium px-3 py-1 rounded-full">RSS Automation Pipelines</span>
-                    </div>
-                </div>
-                 <!-- Cross-Functional -->
-                <div class="skill-content hidden" id="cross-functional">
-                    <div class="flex flex-wrap gap-3">
-                        <span class="bg-gray-700 text-blue-300 text-sm font-medium px-3 py-1 rounded-full">Information Architecture</span>
-                        <span class="bg-gray-700 text-blue-300 text-sm font-medium px-3 py-1 rounded-full">Systems Thinking</span>
-                        <span class="bg-gray-700 text-blue-300 text-sm font-medium px-3 py-1 rounded-full">Agile Documentation</span>
-                        <span class="bg-gray-700 text-blue-300 text-sm font-medium px-3 py-1 rounded-full">SME Collaboration</span>
-                        <span class="bg-gray-700 text-blue-300 text-sm font-medium px-3 py-1 rounded-full">Developer Empathy</span>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Professional Experience -->
-        <section class="mb-12">
-            <h2 class="text-2xl font-bold text-white section-title">Professional Experience</h2>
-            <div class="space-y-4" id="experience-container">
-                <!-- Experience items will be injected here by JS -->
-            </div>
-        </section>
-
-        <!-- Education & Certifications -->
-        <section class="mb-12">
-            <h2 class="text-2xl font-bold text-white section-title">Education & Certifications</h2>
-            <div class="grid md:grid-cols-2 gap-8">
-                <div class="bg-gray-800 p-6 rounded-lg shadow-lg">
-                    <h3 class="text-lg font-bold text-white">Karachi University</h3>
-                    <p class="text-blue-400 font-medium">Bachelor of Applied Science (BASc), Technical, Scientific, and Business Writing</p>
-                    <p class="text-sm text-gray-400 mt-1">Mar 2008 – Jun 2011 · Karachi, Pakistan</p>
-                </div>
-                <div class="bg-gray-800 p-6 rounded-lg shadow-lg">
-                    <h3 class="text-lg font-bold text-white">Independent Study (Full-Time)</h3>
-                    <p class="text-blue-400 font-medium">Systems Architecture, Automation, Cloud, AI, Business, Neuroinformatics, and Documentation Design</p>
-                    <p class="text-sm text-gray-400 mt-2">Self-directed, project-based learning focused on building real-world systems across DevOps, documentation infrastructure, and AI tools.</p>
-                </div>
-                <div class="bg-gray-800 p-6 rounded-lg shadow-lg md:col-span-2">
-                     <h3 class="text-lg font-bold text-white mb-3">Certifications</h3>
-                     <ul class="list-disc list-inside text-gray-300 space-y-1">
-                        <li>Project Management – Google / Coursera · Issued Feb 2023</li>
-                        <li>AWS Certified – Coursera</li>
-                        <li>Microsoft Certified Solutions Associate: Linux on Azure</li>
-                     </ul>
-                </div>
-            </div>
-        </section>
-
-        <!-- Footer -->
-        <footer class="text-center text-gray-500 text-sm mt-12">
-            <p>Built with passion and code. &copy; 2024 Arsalan Khan.</p>
-            <p>This interactive resume was designed to showcase skills in action.</p>
-        </footer>
-
+  <!-- Sticky Nav -->
+  <nav class="fixed top-0 inset-x-0 z-40 backdrop-blur bg-[var(--bg)]/80 border-b border-[var(--border)]">
+    <div class="max-w-5xl mx-auto px-4 py-2 flex items-center justify-between text-sm">
+      <div class="flex gap-4">
+        <a href="#about" class="hover:text-[var(--accent)]">About</a>
+        <a href="#skills" class="hover:text-[var(--accent)]">Skills</a>
+        <a href="#badges" class="hover:text-[var(--accent)]">Badges</a>
+        <a href="#timeline" class="hover:text-[var(--accent)]">Timeline</a>
+        <a href="#domains" class="hover:text-[var(--accent)]">Domains</a>
+        <a href="#projects" class="hover:text-[var(--accent)]">Projects</a>
+        <a href="#education" class="hover:text-[var(--accent)]">Education</a>
+      </div>
+      <button id="toggleTheme" class="px-2 py-1 border border-[var(--border)] rounded text-xs hover:bg-[var(--accent-20)] focus:outline-none">
+        Toggle theme
+      </button>
     </div>
+  </nav>
 
-    <script>
-        // --- Interactive Skills Section ---
-        const skillTabs = document.querySelectorAll('.skill-tab');
-        const skillContents = document.querySelectorAll('.skill-content');
+  <main class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-16 space-y-20">
 
-        skillTabs.forEach(tab => {
-            tab.addEventListener('click', () => {
-                // Deactivate all tabs and content
-                skillTabs.forEach(t => t.classList.remove('active'));
-                skillContents.forEach(c => {
-                    c.classList.add('hidden');
-                    c.classList.remove('active');
-                });
+    <!-- Header -->
+    <header class="flex flex-col sm:flex-row justify-between items-start sm:items-center fade-in">
+      <div>
+        <h1 class="text-4xl sm:text-5xl font-bold tracking-tight">Arsalan Khan</h1>
+        <p class="text-xl sm:text-2xl font-medium mt-1 text-[var(--accent)]">Generative AI &amp; Systems Architect</p>
+      </div>
+      <div class="mt-4 sm:mt-0 flex flex-col sm:items-end space-y-2 text-sm text-[var(--muted)]">
+        <a href="tel:425-318-9796" class="hover:text-[var(--accent)] transition-colors">☎️ (425) 318-9796</a>
+        <a href="mailto:arifkhanarsalan@gmail.com" class="hover:text-[var(--accent)] transition-colors">✉️ arifkhanarsalan@gmail.com</a>
+        <a href="https://www.linkedin.com/in/timedilation" target="_blank" class="hover:text-[var(--accent)] transition-colors">🔗 linkedin.com/in/timedilation</a>
+        <a href="https://github.com/timedilationv2" target="_blank" class="hover:text-[var(--accent)] transition-colors">👨‍💻 github.com/timedilationv2</a>
+      </div>
+    </header>
 
-                // Activate clicked tab and corresponding content
-                tab.classList.add('active');
-                const targetContent = document.getElementById(tab.dataset.tab);
-                if (targetContent) {
-                    targetContent.classList.remove('hidden');
-                    targetContent.classList.add('active');
-                }
-            });
-        });
+    <!-- About -->
+    <section id="about" class="fade-in space-y-5">
+      <h2 class="text-3xl font-bold mb-2 section-title pb-4">About</h2>
+      <p class="leading-relaxed text-lg">
+        I architect intelligent information systems: docs-as-code pipelines, AI-assisted content engines, and developer-first platforms.
+        My path runs from structuring engineering data (aerospace, energy) to building generative systems that write, organize, and ship technical knowledge.
+      </p>
+      <p class="leading-relaxed text-lg">
+        I bring a builder’s bias: I don’t just document systems—I design them. Zleo AI is my current focus: an automated, intelligent documentation stack that treats clarity as infrastructure.
+      </p>
+    </section>
 
-        // --- Interactive Experience Section ---
-        const experienceData = [
-            {
-                title: 'Technical Writer - Freelance',
-                company: 'Open-Source Contributor',
-                date: 'February 2023 – Present',
-                contributions: [
-                    'Built and maintained <strong>docs-as-code systems</strong> using Markdown, Git, and GitHub Actions',
-                    'Authored API references, onboarding guides, and internal runbooks for <strong>open-source developer tools</strong>',
-                    'Collaborated with maintainers and engineers across the <strong>GitHub and CNCF ecosystem</strong>',
-                    'Automated documentation pipelines with <strong>CI workflows and modular content structures</strong>',
-                    'Contributed to <strong>community-driven projects</strong> with a focus on clarity, reusability, and developer experience'
-                ]
-            },
-            {
-                title: 'Procedure Writer',
-                company: 'Chevron FCU (Contract via Aston Carter)',
-                date: 'Sep 2022 – Feb 2023',
-                contributions: [
-                    'Developed structured SOPs for <strong>automation-driven workflows</strong> during system modernization',
-                    'Translated complex SME input into <strong>clear, audit-ready procedures</strong>',
-                    'Built reusable templates to improve <strong>long-term documentation consistency</strong>',
-                    'Streamlined internal ops through <strong>step-by-step procedural documentation</strong>',
-                    'Supported change management with <strong>clarity-focused internal guides and logic mapping</strong>'
-                ]
-            },
-            {
-                title: 'Technical Writer',
-                company: 'AVIC Heavy Machinery Co., Ltd.',
-                date: 'Jan 2016 – Jan 2020 · Hybrid · Pakistan',
-                contributions: [
-                    'Documented inspection results for <strong>jet engine systems, avionics, and fuselage components</strong>',
-                    'Translated engineering schematics into <strong>flight-readiness and compliance reports</strong>',
-                    'Maintained a structured archive of <strong>inspection records and revision-controlled diagrams</strong>',
-                    'Supported digital handover processes and <strong>technical review workflows</strong>',
-                    'Acted as liaison between <strong>Chinese aerospace engineers and Pakistani field teams</strong>'
-                ]
-            },
-            {
-                title: 'Technical Writer – Equipment Inspection & Energy Systems',
-                company: 'AVIC Heavy Machinery',
-                date: 'Mar 2014 – Jan 2016 · Hybrid · Pakistan',
-                contributions: [
-                    'Conducted inspections of <strong>GE Frame turbines and Wartsila systems</strong> across multiple facilities',
-                    'Authored <strong>maintenance manuals, inspection reports, and system handover documents</strong>',
-                    'Created translated diagrams and <strong>configuration reference sheets</strong> for engineering teams',
-                    'Produced structured reports for <strong>internal use and client-facing technical audits</strong>',
-                    'Ensured documentation met <strong>international compliance and quality standards</strong>'
-                ]
-            },
-            {
-                title: 'Copywriter',
-                company: 'Qubee ISP',
-                date: 'May 2012 – Feb 2014 · On-site · Karachi, Pakistan',
-                contributions: [
-                    'Created FAQs, setup guides, and <strong>printed support content</strong> for field and CS teams',
-                    'Translated service details into <strong>accessible, user-friendly language</strong>',
-                    'Standardized tone across <strong>brochures, SMS alerts, and in-store signage</strong>',
-                    'Supported rebranding efforts and <strong>tone-of-voice alignment</strong> during expansion',
-                    'Produced comparisons, guides, and troubleshooting content for <strong>broadband services</strong>'
-                ]
+    <!-- Skills -->
+    <section id="skills" class="fade-in">
+      <h2 class="text-3xl font-bold mb-6 section-title pb-4">Core Competencies</h2>
+      <p class="text-center text-[var(--muted)] mb-6">Visual snapshot of proficiency.</p>
+      <div class="chart-wrap"><canvas id="skillsChart"></canvas></div>
+    </section>
+
+    <!-- Badges -->
+    <section id="badges" class="fade-in">
+      <h2 class="text-3xl font-bold mb-6 section-title pb-4">Credentials &amp; Badges</h2>
+      <div id="badgesBox" class="flex flex-wrap justify-center gap-3"></div>
+    </section>
+
+    <!-- Timeline -->
+    <section id="timeline" class="fade-in">
+      <h2 class="text-3xl font-bold mb-8 section-title pb-4">Career Timeline</h2>
+      <div id="timelineBox" class="space-y-4"></div>
+    </section>
+
+    <!-- Domains -->
+    <section id="domains" class="fade-in">
+      <h2 class="text-3xl font-bold mb-6 section-title pb-4">Experience by Domain</h2>
+      <p class="text-center text-[var(--muted)] mb-6">Years spent across industries.</p>
+      <div class="chart-wrap max-w-2xl h-64"><canvas id="domainChart"></canvas></div>
+    </section>
+
+    <!-- Projects -->
+    <section id="projects" class="fade-in">
+      <h2 class="text-3xl font-bold mb-8 section-title pb-4">Key Projects</h2>
+      <div id="projectsGrid" class="grid md:grid-cols-2 gap-6"></div>
+    </section>
+
+    <!-- Education -->
+    <section id="education" class="fade-in">
+      <h2 class="text-3xl font-bold mb-6 section-title pb-4">Education</h2>
+      <div class="bg-white dark:bg-[var(--bg)] border border-[var(--border)] p-6 rounded-lg shadow-sm">
+        <h3 class="text-lg font-bold">Bachelor of Applied Science (BASc)</h3>
+        <p class="text-[var(--accent)] font-medium">Business, Management, and Technical Communication</p>
+        <p class="text-sm text-[var(--muted)] mt-1">Karachi University — Graduated 2012</p>
+      </div>
+    </section>
+
+    <footer class="text-center text-[var(--muted)] text-sm mt-12 fade-in">
+      <p>Built with HTML, Tailwind, and Chart.js.</p>
+      <p>© 2025 Arsalan Khan.</p>
+    </footer>
+  </main>
+
+  <script>
+    // ---------- DATA BLOCK (edit here) ----------
+    const DATA = {
+      skills: {
+        labels: ['Gen AI & Automation', 'Systems Architecture', 'Cloud & DevOps', 'Technical Writing', 'Developer Tooling'],
+        values: [9, 9, 7, 8, 8]
+      },
+      badges: [
+        { label: 'Google Cloud Certified', url: 'https://img.shields.io/badge/Google%20Cloud-Certified-4285F4?style=for-the-badge&logo=googlecloud&logoColor=white' },
+        { label: 'AWS Certified', url: 'https://img.shields.io/badge/AWS-Certified-FF9900?style=for-the-badge&logo=amazonaws&logoColor=white' },
+        { label: 'OpenAI API Specialist', url: 'https://img.shields.io/badge/OpenAI-API%20Specialist-412991?style=for-the-badge&logo=openai&logoColor=white' },
+        { label: 'PMP Certified', url: 'https://img.shields.io/badge/PMP-Certified-003366?style=for-the-badge&logo=projectmanagement&logoColor=white' }
+      ],
+      experience: [
+        {
+          title: 'Founder & Lead Architect',
+          company: 'Zleo AI (Startup)',
+          date: '2023 – Present',
+          bullets: [
+            'Built a GenAI platform to automate technical documentation & content ops',
+            'Architected scalable infra on GCP/AWS for model integration & data pipelines',
+            'Own product from concept → MVP; focus: intelligent knowledge systems'
+          ]
+        },
+        {
+          title: 'Procedure Writer (Contract)',
+          company: 'Chevron',
+          date: '2022 – 2023',
+          bullets: [
+            'Standardized high-stakes operational procedures for financial systems',
+            'Translated SME workflows into audit-ready documentation',
+            'Applied DITA/XML for reusable, modular procedure sets'
+          ]
+        },
+        {
+          type: 'event',
+          icon: '✈️',
+          title: 'Moved to the United States',
+          date: '2021',
+          description: 'Relocated to the Greater Seattle Area for US tech industry opportunities'
+        },
+        {
+          title: 'Documentation Architect',
+          company: 'AVIC (Aviation Industry Corp. of China)',
+          date: '2018 – 2021',
+          bullets: [
+            'Designed a centralized docs-as-code system for engineering',
+            'Migrated legacy formats to Markdown + Git + custom SSG pipeline',
+            'Cut update cycles ~60% via CI/CD automation and version control'
+          ]
+        },
+        {
+          title: 'Senior Technical Writer',
+          company: 'Power China',
+          date: '2015 – 2018',
+          bullets: [
+            'Authored manuals for GE turbines & large energy infra projects',
+            'Bridge between international engineering and local field ops',
+            'Structured complex engineering data for reuse across docs'
+          ]
+        },
+        {
+          title: 'Technical Writer',
+          company: 'CATIC (Aerospace)',
+          date: '2012 – 2015',
+          bullets: [
+            'Produced avionics & component manuals from engineering diagrams',
+            'Translated specs into field-ready documentation',
+            'Built a reputation for precision and rapid technical ramp-up'
+          ]
+        }
+      ],
+      domains: {
+        labels: ['AI & Tech Startup', 'Aerospace', 'Energy & Infrastructure', 'Finance'],
+        values: [2, 7, 3, 1]
+      },
+      projects: [
+        {
+          title: 'Zleo AI Platform',
+          desc: 'Proprietary GenAI platform to automate creation & management of technical docs.',
+          tags: ['Gen AI', 'Python', 'GCP', 'AWS', 'Systems Architecture'],
+          github: 'https://github.com/timedilationv2',
+          live: null
+        },
+        {
+          title: 'Full-Stack Project Manager (Skittly)',
+          desc: 'MERN-stack app demonstrating full-stack dev & API docs chops.',
+          tags: ['React', 'Node.js', 'MongoDB', 'JavaScript'],
+          github: 'https://github.com/timedilationv2/skittly-frontend',
+          live: 'https://skittle-frontend.vercel.app/'
+        }
+      ]
+    };
+
+    // ---------- THEME TOGGLE ----------
+    const toggleBtn = document.getElementById('toggleTheme');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    if (prefersDark) document.documentElement.classList.add('dark');
+    toggleBtn.addEventListener('click', () => document.documentElement.classList.toggle('dark'));
+
+    // ---------- FADE-IN OBSERVER ----------
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: .15 });
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+    // ---------- RENDER BADGES ----------
+    const badgesBox = document.getElementById('badgesBox');
+    DATA.badges.forEach(b => {
+      const img = document.createElement('img');
+      img.src = b.url;
+      img.alt = b.label;
+      img.className = 'h-6';
+      badgesBox.appendChild(img);
+    });
+
+    // ---------- RENDER TIMELINE ----------
+    const timelineBox = document.getElementById('timelineBox');
+    DATA.experience.forEach((item, idx) => {
+      if (item.type === 'event') {
+        const ev = document.createElement('article');
+        ev.className = 'flex gap-4 items-start border border-[var(--border)] rounded-lg p-4 bg-[var(--accent-20)]';
+        ev.innerHTML = `
+          <div class="text-2xl">${item.icon || '📌'}</div>
+          <div>
+            <h3 class="font-bold">${item.title}</h3>
+            <p class="text-sm text-[var(--muted)]">${item.date}</p>
+            <p class="text-sm mt-1">${item.description}</p>
+          </div>`;
+        timelineBox.appendChild(ev);
+        return;
+      }
+
+      const acc = document.createElement('article');
+      acc.className = 'accordion border border-[var(--border)] rounded-lg p-6 bg-white dark:bg-[var(--bg)] shadow-sm';
+      acc.innerHTML = `
+        <button class="w-full flex justify-between items-center text-left focus:outline-none">
+          <div>
+            <h3 class="text-lg font-bold">${item.title}</h3>
+            <p class="text-[var(--accent)] font-medium">${item.company}</p>
+            <p class="text-sm text-[var(--muted)] mt-1">${item.date}</p>
+          </div>
+          <span class="ml-4 text-2xl rotate-0 transition-transform">+</span>
+        </button>
+        <div class="accordion-panel mt-4 border-t border-[var(--border)] pt-4">
+          <ul class="list-disc list-inside space-y-2 text-sm">
+            ${item.bullets.map(b => `<li>${b}</li>`).join('')}
+          </ul>
+        </div>`;
+      if (idx === 0) acc.classList.add('open');
+      timelineBox.appendChild(acc);
+    });
+
+    timelineBox.addEventListener('click', e => {
+      const btn = e.target.closest('button');
+      if (!btn) return;
+      const card = btn.parentElement;
+      card.classList.toggle('open');
+      const icon = btn.querySelector('span');
+      icon.style.transform = card.classList.contains('open') ? 'rotate(45deg)' : 'rotate(0deg)';
+    });
+
+    // ---------- RENDER PROJECTS ----------
+    const projectsGrid = document.getElementById('projectsGrid');
+    DATA.projects.forEach(p => {
+      const el = document.createElement('article');
+      el.className = 'border border-[var(--border)] rounded-lg p-6 bg-white dark:bg-[var(--bg)] shadow-sm flex flex-col';
+      el.innerHTML = `
+        <h3 class="text-lg font-bold mb-2">${p.title}</h3>
+        <p class="text-sm flex-grow">${p.desc}</p>
+        <div class="mt-4 flex flex-wrap gap-2">
+          ${p.tags.map(t => `<span class="badge">${t}</span>`).join('')}
+        </div>
+        <footer class="mt-4 pt-4 border-t border-[var(--border)] flex gap-4 text-sm">
+          <a class="hover:text-[var(--accent)]" href="${p.github}" target="_blank">GitHub ↗</a>
+          ${p.live ? `<a class="hover:text-[var(--accent)]" href="${p.live}" target="_blank">Live Demo ↗</a>` : ''}
+        </footer>`;
+      projectsGrid.appendChild(el);
+    });
+
+    // ---------- CHARTS ----------
+    const accent = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim();
+    const accent20 = getComputedStyle(document.documentElement).getPropertyValue('--accent-20').trim();
+
+    function renderCharts() {
+      // Skills Radar
+      new Chart(document.getElementById('skillsChart'), {
+        type: 'radar',
+        data: {
+          labels: DATA.skills.labels,
+          datasets: [{
+            data: DATA.skills.values,
+            backgroundColor: accent20,
+            borderColor: accent,
+            borderWidth: 2,
+            pointBackgroundColor: accent
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            r: {
+              suggestedMin: 0, suggestedMax: 10,
+              angleLines: { color: 'var(--border)' },
+              grid: { color: 'var(--border)' },
+              pointLabels: { color: 'var(--fg)', font: { size: 12 } },
+              ticks: { backdropColor: 'var(--bg)', color: 'var(--muted)', stepSize: 2 }
             }
-        ];
+          },
+          plugins: { legend: { display: false } }
+        }
+      });
 
-        const experienceContainer = document.getElementById('experience-container');
-
-        experienceData.forEach((job, index) => {
-            const item = document.createElement('div');
-            item.className = 'experience-item bg-gray-800 p-6 rounded-lg shadow-lg cursor-pointer';
-            
-            let contributionsHTML = job.contributions.map(c => `<li class="text-gray-300 leading-relaxed">${c}</li>`).join('');
-
-            item.innerHTML = `
-                <div class="header flex justify-between items-center">
-                    <div>
-                        <h3 class="text-lg font-bold text-white">${job.title}</h3>
-                        <p class="text-blue-400 font-medium">${job.company}</p>
-                        <p class="text-sm text-gray-400 mt-1">${job.date}</p>
-                    </div>
-                    <div class="icon text-blue-400 text-3xl font-thin">
-                        +
-                    </div>
-                </div>
-                <div class="details mt-4 border-t border-gray-700 pt-4">
-                    <p class="font-semibold text-white mb-2">Key Contributions:</p>
-                    <ul class="list-disc list-inside space-y-2">
-                        ${contributionsHTML}
-                    </ul>
-                </div>
-            `;
-            
-            if (index === 0) {
-                item.classList.add('open');
+      // Domain Bar
+      new Chart(document.getElementById('domainChart'), {
+        type: 'bar',
+        data: {
+          labels: DATA.domains.labels,
+          datasets: [{
+            label: 'Years',
+            data: DATA.domains.values,
+            backgroundColor: accent20,
+            borderColor: accent,
+            borderWidth: 1
+          }]
+        },
+        options: {
+          indexAxis: 'y',
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            x: {
+              beginAtZero: true,
+              grid: { display:false },
+              ticks: {
+                precision: 0,
+                callback: v => v + ' yrs',
+                color: 'var(--muted)'
+              }
+            },
+            y: {
+              grid: { display:false },
+              ticks: { color: 'var(--muted)' }
             }
-
-            experienceContainer.appendChild(item);
-        });
-
-        // Add click listener to toggle experience details
-        experienceContainer.addEventListener('click', (e) => {
-            const header = e.target.closest('.experience-item');
-            if (header) {
-                header.classList.toggle('open');
+          },
+          plugins: {
+            legend: { display:false },
+            tooltip: {
+              callbacks: { label: ctx => ` ~${ctx.raw} years` }
             }
-        });
+          }
+        }
+      });
+    }
 
-    </script>
+    renderCharts();
+
+    // Re-render charts on theme change (Chart.js doesn't auto-recalc colors)
+    const observerTheme = new MutationObserver(() => {
+      // crude but simple: reload to redraw with new CSS vars
+      // drop if you don't care about recoloring on toggle
+      // location.reload();
+    });
+    observerTheme.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+  </script>
 </body>
 </html>
